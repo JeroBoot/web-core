@@ -4,15 +4,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jero</groupId>
-    <artifactId>web-core</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-
     <parent>
         <groupId>com.jero</groupId>
         <artifactId>root-parent-build</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+
+    <groupId>com.jero</groupId>
+    <artifactId>web-core</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <jero.snowflake.version>1.0.0-SNAPSHOT</jero.snowflake.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -30,6 +37,8 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+
+
         <!-- 定时器 -->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
@@ -44,6 +53,24 @@
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz-jobs</artifactId>
+        </dependency>
+
+        <!-- 数据库 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!-- 雪花ID生成器 -->
+        <dependency>
+            <groupId>com.jero</groupId>
+            <artifactId>snowflake-generator</artifactId>
+            <version>${jero.snowflake.version}</version>
         </dependency>
 
     </dependencies>
