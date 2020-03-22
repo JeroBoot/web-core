@@ -114,3 +114,5 @@ fabric.properties
 .idea/misc.xml
 .idea/vcs.xml
 .idea/encodings.xml
+.idea/checkstyle-idea.xml
+.idea/sonarlint/
