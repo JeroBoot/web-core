@@ -28,6 +28,18 @@
         </dependency>
 
         <dependency>
+            <groupId>com.jero</groupId>
+            <artifactId>swagger-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jero</groupId>
+            <artifactId>redis-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- spring组件 -->
+
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
         </dependency>
