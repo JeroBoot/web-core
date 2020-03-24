@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.io.IOException;
  * @Author lixuetao
  * @Date 2020/3/24
  **/
+@WebFilter(urlPatterns = "/*")
 public class HttpCacheFilter implements Filter, Ordered {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpCacheFilter.class);
