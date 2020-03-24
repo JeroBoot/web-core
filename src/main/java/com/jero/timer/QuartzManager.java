@@ -1,8 +1,9 @@
 package com.jero.timer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.jero.filter.RequestInfoFilter;
 import org.quartz.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import java.util.Date;
@@ -19,7 +20,8 @@ import static org.quartz.JobBuilder.newJob;
  */
 public class QuartzManager {
 
-    private final static Log log = LogFactory.getLog(QuartzManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(QuartzManager.class);
+
     static SchedulerFactoryBean sf = new SchedulerFactoryBean();
 
     /**
@@ -151,7 +153,7 @@ public class QuartzManager {
                     .withSchedule(simpleSchedule)
                     .build();
             Date ft = sched.scheduleJob(job, trigger);
-            log.info(jobName + "启动于" + ft);
+            LOGGER.info("{}启动于{}" , jobName, ft);
             // 启动
             if (!sched.isShutdown()) {
                 sched.start();
@@ -186,7 +188,7 @@ public class QuartzManager {
                     .build();
 
             Date ft = sched.scheduleJob(job, trigger);
-            log.info(jobName + "启动于" + ft);
+            LOGGER.info("{}启动于{}" , jobName, ft);
             // 启动
             if (!sched.isShutdown()) {
                 sched.start();

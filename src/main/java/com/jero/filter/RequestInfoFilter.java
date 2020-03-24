@@ -1,8 +1,9 @@
 package com.jero.filter;
 
+import com.jero.core.advice.JeroExceptionHandler;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
@@ -22,7 +23,8 @@ import java.util.*;
 @Order(value = 12)
 public class RequestInfoFilter implements Filter{
 
-    private static final Log logger = LogFactory.getLog(RequestInfoFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequestInfoFilter.class);
+
     private static final List<String> ignoreList = new ArrayList<String>();
 
     @Override
@@ -44,9 +46,9 @@ public class RequestInfoFilter implements Filter{
             long startTime = System.currentTimeMillis();
             String uri = request.getServletPath() + (request.getPathInfo() == null ? "" : request.getPathInfo());
             if(!isIgnore(uri)) {
-                logger.info("==================== RequestInfoFilter Start ====================");
-                logger.info(request.getMethod() + " : " + uri);
-                logger.info("request time：" + request.getSession().getMaxInactiveInterval());
+                LOGGER.info("==================== RequestInfoFilter Start ====================");
+                LOGGER.info(request.getMethod() + " : " + uri);
+                LOGGER.info("request time：{}" , request.getSession().getMaxInactiveInterval());
 
                 logHeaders(request);
                 logParams(request);
@@ -54,8 +56,8 @@ public class RequestInfoFilter implements Filter{
                 filterChain.doFilter(request, response);
 
                 long endTime = System.currentTimeMillis();
-                logger.info(request.getMethod() + " " + "taking：" + (endTime - startTime) + " ms");
-                logger.info("==================== RequestInfoFilter End ====================");
+                LOGGER.info(request.getMethod() + " " + "taking：" + (endTime - startTime) + " ms");
+                LOGGER.info("==================== RequestInfoFilter End ====================");
             } else {
                 filterChain.doFilter(request, response);
             }
@@ -76,7 +78,7 @@ public class RequestInfoFilter implements Filter{
         }
         headerMap.put("RemoteHost", request.getRemoteHost() + ":" + request.getRemotePort());
 
-        logger.info(headerMap);
+        LOGGER.info(headerMap.toString());
     }
 
     private void logParams(javax.servlet.http.HttpServletRequest request) {
@@ -91,7 +93,7 @@ public class RequestInfoFilter implements Filter{
             }
         }
 
-        logger.info(maps.toString());
+        LOGGER.info(maps.toString());
     }
 
     private static final boolean isIgnore(String url) {
