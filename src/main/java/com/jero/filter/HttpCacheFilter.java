@@ -17,8 +17,7 @@ import java.io.IOException;
  * @Author lixuetao
  * @Date 2020/3/24
  **/
-@WebFilter(urlPatterns = "/*")
-public class HttpCacheFilter implements Filter, Ordered {
+public class HttpCacheFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpCacheFilter.class);
 
@@ -42,11 +41,5 @@ public class HttpCacheFilter implements Filter, Ordered {
 
     @Override
     public void destroy() {}
-
-    @Override
-    public int getOrder() {
-        int currentFilterOrder = 1;
-        return currentFilterOrder;
-    }
 
 }

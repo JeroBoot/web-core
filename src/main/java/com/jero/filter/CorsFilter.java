@@ -9,8 +9,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/*")
-public class CorsFilter implements Filter, Ordered {
+public class CorsFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -31,12 +30,6 @@ public class CorsFilter implements Filter, Ordered {
 
 	@Override
 	public void destroy() {
-	}
-
-	@Override
-	public int getOrder() {
-		int currentFilterOrder = 2;
-		return currentFilterOrder;
 	}
 
 }

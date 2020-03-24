@@ -20,8 +20,7 @@ import java.util.*;
  * @author zer0
  * @version 1.0
  */
-@WebFilter(urlPatterns = "/*")
-public class RequestInfoFilter implements Filter, Ordered {
+public class RequestInfoFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestInfoFilter.class);
 
@@ -113,9 +112,4 @@ public class RequestInfoFilter implements Filter, Ordered {
 
     }
 
-    @Override
-    public int getOrder() {
-        int currentFilterOrder = 3;
-        return currentFilterOrder;
-    }
 }
