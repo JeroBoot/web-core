@@ -4,6 +4,7 @@ import com.jero.core.advice.JeroExceptionHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
@@ -20,8 +21,7 @@ import java.util.*;
  * @version 1.0
  */
 @WebFilter(urlPatterns = "/*")
-@Order(value = 12)
-public class RequestInfoFilter implements Filter{
+public class RequestInfoFilter implements Filter, Ordered {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestInfoFilter.class);
 
@@ -111,5 +111,11 @@ public class RequestInfoFilter implements Filter{
     @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public int getOrder() {
+        int currentFilterOrder = 3;
+        return currentFilterOrder;
     }
 }

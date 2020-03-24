@@ -1,6 +1,7 @@
 package com.jero.filter;
 
 
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import javax.servlet.*;
@@ -9,8 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter(urlPatterns = "/*")
-@Order(value = 10)
-public class CorsFilter implements Filter {
+public class CorsFilter implements Filter, Ordered {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -31,6 +31,12 @@ public class CorsFilter implements Filter {
 
 	@Override
 	public void destroy() {
+	}
+
+	@Override
+	public int getOrder() {
+		int currentFilterOrder = 2;
+		return currentFilterOrder;
 	}
 
 }
