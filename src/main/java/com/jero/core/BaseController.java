@@ -30,7 +30,8 @@ public abstract class BaseController<T extends BaseEntity<?>> {
         return this.getService().list(Wrappers.query(t));
     }
 
-    public IPage<T> page(Page page, T t){
+    public IPage<T> page(PageInfo pageInfo, T t){
+        Page page = getPage(pageInfo);
         return this.getService().page(page, Wrappers.query(t));
     }
 
@@ -54,6 +55,15 @@ public abstract class BaseController<T extends BaseEntity<?>> {
         pageInfo.setPageCount(page.getPages());
         pageInfo.setPageNo((int)page.getCurrent());
         return pageInfo;
+    }
+
+    public Page getPage(PageInfo pageInfo) {
+        Page page = new Page();
+        page.setSize(pageInfo.getPageSize());
+        page.setCurrent(pageInfo.getPageNo());
+        page.setPages(pageInfo.getPageCount());
+
+        return page;
     }
 
     protected abstract IService<T> getService();
