@@ -95,6 +95,11 @@
             <version>${jero.snowflake.version}</version>
         </dependency>
 
+        <!-- 线程池 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
