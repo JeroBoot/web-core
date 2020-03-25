@@ -35,6 +35,7 @@
         <dependency>
             <groupId>com.jero</groupId>
             <artifactId>redis-spring-boot-starter</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <!-- spring组件 -->

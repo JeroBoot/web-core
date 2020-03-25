@@ -22,29 +22,29 @@ public abstract class BaseController<T extends BaseEntity<?>> {
 
     public BaseController(){}
 
-    public T getById(Serializable id){
+    public final T getById(Serializable id){
         return this.getService().getById(id);
     }
 
-    public List<T> list(T t){
+    public final List<T> list(T t){
         return this.getService().list(Wrappers.query(t));
     }
 
-    public PageInfo<T> page(PageInfo pageInfo, T t){
+    public final PageInfo<T> page(PageInfo pageInfo, T t){
         Page page = getPage(pageInfo);
         Page resultPage = this.getService().page(page, Wrappers.query(t));
         return getPageInfo(resultPage);
     }
 
-    public boolean save(T data){
+    public final boolean save(T data){
         return this.getService().save(data);
     }
 
-    public boolean update(T data){
+    public final boolean update(T data){
         return this.getService().updateById(data);
     }
 
-    public boolean deleteBatchIds(Serializable... ids){
+    public final boolean deleteBatchIds(Serializable... ids){
         return this.getService().removeByIds(Arrays.asList(ids));
     }
 
