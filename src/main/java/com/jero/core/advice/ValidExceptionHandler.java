@@ -38,8 +38,6 @@ public class ValidExceptionHandler {
      *
      * @param exception
      * @return
-     * @author zhangsj
-     * date
      **/
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -55,8 +53,6 @@ public class ValidExceptionHandler {
      *
      * @param exception
      * @return
-     * @author zhangsj
-     * date
      **/
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(BindException.class)
@@ -72,8 +68,6 @@ public class ValidExceptionHandler {
      *
      * @param exception
      * @return
-     * @author zhangsj
-     * date
      **/
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(ConstraintViolationException.class)
