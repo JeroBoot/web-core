@@ -1,4 +1,4 @@
-package com.jero.core;
+package com.jero.core.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -30,9 +30,10 @@ public abstract class BaseController<T extends BaseEntity<?>> {
         return this.getService().list(Wrappers.query(t));
     }
 
-    public IPage<T> page(PageInfo pageInfo, T t){
+    public PageInfo<T> page(PageInfo pageInfo, T t){
         Page page = getPage(pageInfo);
-        return this.getService().page(page, Wrappers.query(t));
+        Page resultPage = this.getService().page(page, Wrappers.query(t));
+        return getPageInfo(resultPage);
     }
 
     public boolean save(T data){
