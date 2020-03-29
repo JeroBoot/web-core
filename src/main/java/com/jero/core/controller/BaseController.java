@@ -1,5 +1,6 @@
 package com.jero.core.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,26 +28,38 @@ public abstract class BaseController<T extends BaseEntity<?>> {
     }
 
     public final List<T> list(T t){
-        return this.getService().list(Wrappers.query(t));
+        QueryWrapper query = Wrappers.query(t);
+        this.expandQuery(query);
+        return this.getService().list(query);
     }
 
     public final PageInfo<T> page(PageInfo pageInfo, T t){
         Page page = getPage(pageInfo);
-        Page resultPage = this.getService().page(page, Wrappers.query(t));
+        QueryWrapper query = Wrappers.query(t);
+        this.expandQuery(query);
+        Page resultPage = this.getService().page(page, query);
         return getPageInfo(resultPage);
     }
 
     public final boolean save(T data){
+        this.verifySaveData(data);
         return this.getService().save(data);
     }
 
     public final boolean update(T data){
+        this.verifyUpdateData(data);
         return this.getService().updateById(data);
     }
 
     public final boolean deleteBatchIds(Serializable... ids){
         return this.getService().removeByIds(Arrays.asList(ids));
     }
+
+    protected abstract void expandQuery(QueryWrapper query);
+
+    protected abstract void verifySaveData(T data);
+
+    protected abstract void verifyUpdateData(T data);
 
     public PageInfo<T> getPageInfo(IPage<T> page) {
         PageInfo<T> pageInfo = new PageInfo();
