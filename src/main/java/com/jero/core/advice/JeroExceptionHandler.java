@@ -6,6 +6,7 @@ import com.jero.http.ResponseMessage;
 import com.jero.http.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author zer0
  * @version 1.0
  */
+@Order(2)
 @ControllerAdvice
 public class JeroExceptionHandler {
 

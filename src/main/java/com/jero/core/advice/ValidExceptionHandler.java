@@ -6,6 +6,7 @@ import com.jero.http.ResponseMessage;
 import com.jero.http.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,7 @@ import java.util.Set;
  * @author zer0
  * @version 1.0
  */
+@Order(1)
 @ControllerAdvice
 public class ValidExceptionHandler {
 
