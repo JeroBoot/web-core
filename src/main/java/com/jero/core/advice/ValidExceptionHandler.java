@@ -1,7 +1,6 @@
 package com.jero.core.advice;
 
 import com.jero.common.constant.Code;
-import com.jero.core.advice.dto.ValidError;
 import com.jero.http.ResponseMessage;
 import com.jero.http.Result;
 import org.slf4j.Logger;
@@ -44,9 +43,9 @@ public class ValidExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseMessage<List<ValidError>> handleMethodArgument(MethodArgumentNotValidException exception) {
+    public ResponseMessage<List<String>> handleMethodArgument(MethodArgumentNotValidException exception) {
         BindingResult result = exception.getBindingResult();
-        List<ValidError> validErrorList = adapterValidError(result);
+        List<String> validErrorList = adapterValidError(result);
         return Result.error(Code.VALID_ERROR, validErrorList);
     }
 
@@ -59,9 +58,9 @@ public class ValidExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(BindException.class)
     @ResponseBody
-    public ResponseMessage<List<ValidError>> handleConstraint(BindException  exception) {
+    public ResponseMessage<List<String>> handleConstraint(BindException  exception) {
         BindingResult result = exception.getBindingResult();
-        List<ValidError> validErrorList = adapterValidError(result);
+        List<String> validErrorList = adapterValidError(result);
         return Result.error(Code.VALID_ERROR, validErrorList);
     }
 
@@ -74,16 +73,14 @@ public class ValidExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseBody
-    public ResponseMessage<List<ValidError>> handleConstraint(ConstraintViolationException exception) {
-
-        List<ValidError> validErrorList = new ArrayList<>();
+    public ResponseMessage<List<String>> handleConstraint(ConstraintViolationException exception) {
+        List<String> validErrorList = new ArrayList<>();
         Set<ConstraintViolation<?>> violationSet = exception.getConstraintViolations();
         for (ConstraintViolation violation : violationSet) {
-            validErrorList.add(new ValidError(violation.getPropertyPath().toString(), violation.getMessage()));
+            validErrorList.add(violation.getMessage());
             LOGGER.warn("param valid error: obj[{}], filed[{}], message[{}]", violation.getRootBeanClass(),
                     violation.getPropertyPath(), violation.getMessage());
         }
-
         return Result.error(Code.VALID_ERROR, validErrorList);
     }
 
@@ -93,10 +90,10 @@ public class ValidExceptionHandler {
      * @param result
      * @return
      */
-    private List<ValidError> adapterValidError(BindingResult result){
-        List<ValidError> validErrorList = new ArrayList<>();
+    private List<String> adapterValidError(BindingResult result){
+        List<String> validErrorList = new ArrayList<String>();
         for (FieldError fieldError : result.getFieldErrors()) {
-            validErrorList.add(new ValidError(fieldError.getField(), fieldError.getDefaultMessage()));
+            validErrorList.add(fieldError.getDefaultMessage());
             LOGGER.warn("valid error: obj[{}], filed[{}], message[{}]",
                     fieldError.getObjectName(), fieldError.getField(), fieldError.getDefaultMessage());
         }
