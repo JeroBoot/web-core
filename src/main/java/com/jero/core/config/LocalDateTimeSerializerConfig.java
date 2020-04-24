@@ -1,10 +1,10 @@
 package com.jero.core.config;
 
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.time.format.DateTimeFormatter;
 
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
  * @Author lixuetao
  * @Date 2020/4/20
  **/
-@Configurable
+@Configuration
 public class LocalDateTimeSerializerConfig {
 
     @Value("${spring.jackson.date-format:yyyy-MM-dd HH:mm:ss}")
