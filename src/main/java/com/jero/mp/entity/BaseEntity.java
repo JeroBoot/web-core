@@ -1,6 +1,10 @@
 package com.jero.mp.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+
+import java.util.Date;
 
 /**
  * @Description 基础实体，提供所有的实体类继承
