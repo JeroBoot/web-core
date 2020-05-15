@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * 全局异常统一处理
+ * 全局日志处理
  *
  * @author lixuetao
  * @date 2020-03-25
