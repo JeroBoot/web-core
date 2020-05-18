@@ -9,9 +9,21 @@ import java.util.List;
  **/
 public class PageInfo<T> {
 
+    /**
+     * 当前页
+     */
     private Integer pageNo;
+    /**
+     * 每页数据量
+     */
     private Integer pageSize;
+    /**
+     * 总数据量
+     */
     private Long count;
+    /**
+     * 当前分页总页数
+     */
     private Long pageCount;
     private List<T> list;
 
