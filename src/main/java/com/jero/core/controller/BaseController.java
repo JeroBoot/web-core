@@ -75,7 +75,6 @@ public abstract class BaseController<T extends BaseEntity<?>> {
         Page page = new Page();
         page.setSize(pageInfo.getPageSize());
         page.setCurrent(pageInfo.getPageNo());
-        page.setPages(pageInfo.getPageCount());
 
         return page;
     }
