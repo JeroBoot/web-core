@@ -1,7 +1,10 @@
 package com.jero.core.config.mybatis;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.jero.filter.HttpCacheFilter;
 import org.apache.ibatis.reflection.MetaObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -14,10 +17,16 @@ import java.util.Date;
 @Component
 public class DateMetaObjectHandler implements MetaObjectHandler {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DateMetaObjectHandler.class);
+
     @Override
     public void insertFill(MetaObject metaObject) {
-        Date now = new Date();
-        setFieldValByName("createTime", now, metaObject);
+        try {
+            Date now = new Date();
+            setFieldValByName("createTime", now, metaObject);
+        } catch (Exception e) {
+            LOGGER.error("自动插入创建时间失败", e);
+        }
     }
 
     @Override

@@ -29,14 +29,14 @@ public abstract class BaseController<T extends BaseEntity<?>> {
 
     public final List<T> list(T t){
         QueryWrapper query = Wrappers.query(t);
-        this.expandQuery(query);
+        this.expandQuery(query, t);
         return this.getService().list(query);
     }
 
     public final PageInfo<T> page(PageInfo pageInfo, T t){
         Page page = getPage(pageInfo);
         QueryWrapper query = Wrappers.query(t);
-        this.expandQuery(query);
+        this.expandQuery(query, t);
         Page resultPage = this.getService().page(page, query);
         return getPageInfo(resultPage);
     }
@@ -55,7 +55,7 @@ public abstract class BaseController<T extends BaseEntity<?>> {
         return this.getService().removeByIds(Arrays.asList(ids));
     }
 
-    protected abstract void expandQuery(QueryWrapper query);
+    protected abstract void expandQuery(QueryWrapper query, T t);
 
     protected abstract void verifySaveData(T data);
 
@@ -75,7 +75,6 @@ public abstract class BaseController<T extends BaseEntity<?>> {
         Page page = new Page();
         page.setSize(pageInfo.getPageSize());
         page.setCurrent(pageInfo.getPageNo());
-        page.setPages(pageInfo.getPageCount());
 
         return page;
     }
