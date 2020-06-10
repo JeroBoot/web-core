@@ -1,6 +1,10 @@
 package com.jero.mp.query;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.jero.common.utils.ConvertUtils;
+import com.jero.common.utils.StringUtils;
+import com.jero.mp.query.enums.ClassTypeEnum;
+import com.jero.mp.query.enums.QueryCriteriaEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.poi.ss.formula.functions.T;
@@ -114,6 +118,76 @@ public class QueryGenerator {
             }
         }
         return false;
+    }
+
+    /**
+     * 添加查询规则
+     * @param queryWrapper
+     * @param fieldName 字段名
+     * @param fieldType 字段类型
+     * @param fieldValue 字段值
+     * @param queryCriteriaEnum 查询条件枚举
+     */
+    private static void addQueryByCriteria(QueryWrapper<?> queryWrapper,
+                                       String fieldName,
+                                       String fieldType,
+                                       String fieldValue,
+                                       QueryCriteriaEnum queryCriteriaEnum){
+
+        if (StringUtils.isEmpty(fieldValue)){
+            return;
+        }
+
+        Object resultValue = handlerValueToObj(fieldType, fieldValue);
+        handlerCriteria(queryWrapper, fieldName, queryCriteriaEnum, resultValue);
+
+    }
+
+    /**
+     * 将param中取得的值转换为对应的对象
+     * @param fieldType 字段的class类型
+     * @param fieldValue 字段的值
+     * @return
+     */
+    private static Object handlerValueToObj(String fieldType, String fieldValue){
+        Object resultValue = fieldValue;
+        //遍历所有类型，进行数据转换
+        for (ClassTypeEnum classTypeEnum : ClassTypeEnum.values()){
+            if (classTypeEnum.getValue().equals(fieldType)){
+                resultValue = classTypeEnum.get(fieldValue);
+                log.debug("转换类型为{}，原始数据为{}，转换得到的值为{}", fieldType, fieldValue, resultValue);
+                break;
+            }
+        }
+        return resultValue;
+    }
+
+    /**
+     * 将结果值和查询条件封装后加入queryWrapper中
+     * @param queryWrapper
+     * @param fieldName
+     * @param queryCriteriaEnum
+     * @param resultValue
+     */
+    private static void handlerCriteria(QueryWrapper<?> queryWrapper,
+                                        String fieldName,
+                                        QueryCriteriaEnum queryCriteriaEnum,
+                                        Object resultValue){
+
+        if (resultValue == null || queryCriteriaEnum == null){
+            return;
+        }
+
+        // TODO 将驼峰命名转化成下划线
+
+        log.info("--查询规则-->{} {} {}", fieldName, queryCriteriaEnum.getCode(), resultValue);
+        //遍历所有条件，筛选出符合条件的加入QueryWrapper
+        for (QueryCriteriaEnum queryCriteria: QueryCriteriaEnum.values()){
+            if (queryCriteria.getCode().equals(queryCriteriaEnum.getCode())){
+                queryCriteria.assemblyQuery(queryWrapper, fieldName, resultValue);
+                break;
+            }
+        }
     }
 
 }
