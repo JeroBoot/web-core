@@ -2,8 +2,10 @@ package com.jero.mp.query;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.poi.ss.formula.functions.T;
 
+import java.beans.PropertyDescriptor;
 import java.util.Map;
 
 /**
@@ -70,13 +72,48 @@ public class QueryGenerator {
      * @param paramMap
      */
     private static void assemblyQueryCriteria(QueryWrapper<?> queryWrapper, Object entity, Map<String, String[]> paramMap){
-        //select字段组装
+        //通过反射获取字段名和字段类型
+        PropertyDescriptor propertyDescriptor[] = PropertyUtils.getPropertyDescriptors(entity);
+
+        /*
+         * select字段组
+         */
+        for (int i = 0; i < propertyDescriptor.length; i++){
+            String fieldName = propertyDescriptor[i].getName();
+            String fieldType = propertyDescriptor[i].getPropertyType().toString();
+
+            if (isFilterField(fieldName) || !PropertyUtils.isReadable(entity, fieldName)){
+                continue;
+            }
+
+            //处理区间查询的情况，带_begin和_end代表是区间查询
+            if (paramMap != null && paramMap.containsKey(fieldName + BEGIN)){
+                // TODO 测试前端传来的值是否接收为map
+                String beginValue = paramMap.get(fieldName + BEGIN)[0].trim();
+            }
+
+        }
 
         //简单查询
 
         //排序逻辑
 
         //高级查询
+    }
+
+    /**
+     * 过滤不拼接到查询条件里的字段
+     * @param name
+     * @return
+     */
+    private static boolean isFilterField(String name){
+        String[] filterName = new String[]{"class", "id", "ids", "page", "sort", "rows"};
+        for (int i = 0; i < filterName.length; i++) {
+            if (filterName[i].equals(name)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
