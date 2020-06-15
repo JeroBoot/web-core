@@ -20,6 +20,7 @@
 
         <jero.snowflake.version>1.0.0-SNAPSHOT</jero.snowflake.version>
         <knife4j.version>2.0.2</knife4j.version>
+        <guava.version>29.0-jre</guava.version>
     </properties>
 
     <dependencies>
@@ -115,6 +116,13 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
     </dependencies>

@@ -1,6 +1,7 @@
 package com.jero.mp.query;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.base.CaseFormat;
 import com.jero.common.utils.ConvertUtils;
 import com.jero.common.utils.StringUtils;
 import com.jero.mp.query.enums.ClassTypeEnum;
@@ -10,6 +11,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 /**
@@ -53,8 +55,11 @@ public class QueryGenerator {
 
     private static final String ORDER_FIELD = "orderField"; //排序字段
     private static final String ORDER_TYPE = "orderType"; //排序类型，值为ASC或者DESC
+    private static final String ORDER_TYPE_ASC = "ASC";
 
     private static final String FIELD = "field"; //前端要求显示字段
+
+    private static final String COMMA = ",";
 
 
     /**
@@ -81,28 +86,42 @@ public class QueryGenerator {
 
         /*
          * select字段组
+         * TODO 处理要查询的字段
          */
         for (int i = 0; i < propertyDescriptor.length; i++){
             String fieldName = propertyDescriptor[i].getName();
             String fieldType = propertyDescriptor[i].getPropertyType().toString();
 
-            if (isFilterField(fieldName) || !PropertyUtils.isReadable(entity, fieldName)){
-                continue;
-            }
+            try {
+                if (isFilterField(fieldName) || !PropertyUtils.isReadable(entity, fieldName)){
+                    continue;
+                }
 
-            //处理区间查询的情况，带_begin和_end代表是区间查询
-            if (paramMap != null && paramMap.containsKey(fieldName + BEGIN)){
-                // TODO 测试前端传来的值是否接收为map
-                String beginValue = paramMap.get(fieldName + BEGIN)[0].trim();
-            }
+                //处理区间查询的情况，带_begin和_end代表是区间查询
+                if (paramMap != null && paramMap.containsKey(fieldName + BEGIN)){
+                    // TODO 测试前端传来的值是否接收为map
+                    String beginValue = paramMap.get(fieldName + BEGIN)[0].trim();
+                    addQueryByCriteria(queryWrapper, fieldName, fieldType, beginValue, QueryCriteriaEnum.GE);
+                }
+                if (paramMap != null && paramMap.containsKey(fieldName + END)){
+                    String endValue = paramMap.get(fieldName + END)[0].trim();
+                    addQueryByCriteria(queryWrapper, fieldName, fieldType, endValue, QueryCriteriaEnum.LE);
+                }
 
+                //从对象中取出字段值
+                Object value = PropertyUtils.getSimpleProperty(entity, fieldName);
+                QueryCriteriaEnum criteria = convertToCriteria(value);
+                handlerCriteria(queryWrapper, fieldName, criteria, value);
+
+            } catch (Exception e){
+                log.error(e.getMessage(), e);
+            }
         }
 
-        //简单查询
-
         //排序逻辑
-
+        doFieldOrder(queryWrapper, paramMap);
         //高级查询
+
     }
 
     /**
@@ -140,7 +159,6 @@ public class QueryGenerator {
 
         Object resultValue = handlerValueToObj(fieldType, fieldValue);
         handlerCriteria(queryWrapper, fieldName, queryCriteriaEnum, resultValue);
-
     }
 
     /**
@@ -178,14 +196,57 @@ public class QueryGenerator {
             return;
         }
 
-        // TODO 将驼峰命名转化成下划线
+        fieldName = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
 
         log.info("--查询规则-->{} {} {}", fieldName, queryCriteriaEnum.getCode(), resultValue);
         //遍历所有条件，筛选出符合条件的加入QueryWrapper
         for (QueryCriteriaEnum queryCriteria: QueryCriteriaEnum.values()){
             if (queryCriteria.getCode().equals(queryCriteriaEnum.getCode())){
                 queryCriteria.assemblyQuery(queryWrapper, fieldName, resultValue);
+                log.debug("匹配到查询规则-->{} {} {}", fieldName, queryCriteria.getCode(), resultValue);
                 break;
+            }
+        }
+    }
+
+    /**
+     * 根据所传的值 转化成对应的比较方式
+     * String 转换为like
+     * 带逗号的String转为 in
+     * @param value
+     * @return
+     */
+    private static QueryCriteriaEnum convertToCriteria(Object value){
+        if (value == null){
+            return null;
+        }
+
+        String val = (value+"").toString().trim();
+        if (val.contains(COMMA)){
+            return QueryCriteriaEnum.IN;
+        } else {
+            return QueryCriteriaEnum.LIKE;
+        }
+    }
+
+    private static void doFieldOrder(QueryWrapper<?> queryWrapper, Map<String, String[]> parameterMap){
+
+        String orderFiled = null;
+        String orderType= null;
+        if (parameterMap != null && parameterMap.containsKey(ORDER_FIELD)){
+            orderFiled = parameterMap.get(ORDER_FIELD)[0].trim();
+        }
+        if (parameterMap != null && parameterMap.containsKey(ORDER_TYPE)){
+            orderType = parameterMap.get(ORDER_TYPE)[0].trim();
+        }
+        log.debug("排序规则为字段{} {}顺序排列", orderFiled, orderType);
+
+        if (StringUtils.isNotEmpty(orderFiled)){
+            //TODO 检查Sql注入
+            if (StringUtils.isNotEmpty(orderType) && orderType.toUpperCase().indexOf(ORDER_TYPE_ASC) >= 0){
+                queryWrapper.orderByAsc(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, orderFiled));
+            } else {
+                queryWrapper.orderByDesc(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, orderFiled));
             }
         }
     }
