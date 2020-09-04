@@ -26,6 +26,7 @@ public class QuartzManager {
 
     /**
      * 添加hours小时执行一次，可执行count次的定时器
+     *
      * @param jobName
      * @param jobGroupName
      * @param triggerName
@@ -36,13 +37,14 @@ public class QuartzManager {
      */
     public static void addJobToCountInHours(String jobName, String jobGroupName,
                                             String triggerName, String triggerGroupName,
-                                            Class jobClass, int hours, int count){
+                                            Class jobClass, int hours, int count) {
         long milliseconds = hours * 3600000L;
         addJobInMilliseconds(jobName, jobGroupName, triggerName, triggerGroupName, jobClass, milliseconds, count);
     }
 
     /**
      * 添加hours小时执行一次，可执行无数次的定时器
+     *
      * @param jobName
      * @param jobGroupName
      * @param triggerName
@@ -51,14 +53,15 @@ public class QuartzManager {
      * @param hours
      */
     public static void addJobInHours(String jobName, String jobGroupName,
-                                       String triggerName, String triggerGroupName,
-                                       Class jobClass, int hours){
+                                     String triggerName, String triggerGroupName,
+                                     Class jobClass, int hours) {
         long milliseconds = hours * 3600000L;
         addJobInMilliseconds(jobName, jobGroupName, triggerName, triggerGroupName, jobClass, milliseconds, 0);
     }
 
     /**
      * 添加minutes分钟执行一次，可执行count次的定时器
+     *
      * @param jobName
      * @param jobGroupName
      * @param triggerName
@@ -68,14 +71,15 @@ public class QuartzManager {
      * @param count
      */
     public static void addJobToCountInMinutes(String jobName, String jobGroupName,
-                                            String triggerName, String triggerGroupName,
-                                            Class jobClass, int minutes, int count){
+                                              String triggerName, String triggerGroupName,
+                                              Class jobClass, int minutes, int count) {
         long milliseconds = minutes * 60000L;
         addJobInMilliseconds(jobName, jobGroupName, triggerName, triggerGroupName, jobClass, milliseconds, count);
     }
 
     /**
      * 添加minutes分钟执行一次，可执行无数次的定时器
+     *
      * @param jobName
      * @param jobGroupName
      * @param triggerName
@@ -85,13 +89,14 @@ public class QuartzManager {
      */
     public static void addJobInMinutes(String jobName, String jobGroupName,
                                        String triggerName, String triggerGroupName,
-                                       Class jobClass, int minutes){
+                                       Class jobClass, int minutes) {
         long milliseconds = minutes * 60000L;
         addJobInMilliseconds(jobName, jobGroupName, triggerName, triggerGroupName, jobClass, milliseconds, 0);
     }
 
     /**
      * 添加seconds秒执行一次，可执行count次的定时器
+     *
      * @param jobName
      * @param jobGroupName
      * @param triggerName
@@ -102,13 +107,14 @@ public class QuartzManager {
      */
     public static void addJobToCountInSeconds(String jobName, String jobGroupName,
                                               String triggerName, String triggerGroupName,
-                                              Class jobClass, int seconds, int count){
+                                              Class jobClass, int seconds, int count) {
         long milliseconds = seconds * 1000L;
         addJobInMilliseconds(jobName, jobGroupName, triggerName, triggerGroupName, jobClass, milliseconds, count);
     }
 
     /**
      * 添加seconds秒执行一次，可执行无数次的定时器
+     *
      * @param jobName
      * @param jobGroupName
      * @param triggerName
@@ -118,24 +124,25 @@ public class QuartzManager {
      */
     public static void addJobInseconds(String jobName, String jobGroupName,
                                        String triggerName, String triggerGroupName,
-                                       Class jobClass, int seconds){
+                                       Class jobClass, int seconds) {
         long milliseconds = seconds * 1000L;
         addJobInMilliseconds(jobName, jobGroupName, triggerName, triggerGroupName, jobClass, milliseconds, 0);
     }
 
     /**
      * 按毫秒间隔添加定时任务，并可指定重复次数
+     *
      * @param jobName
      * @param jobGroupName
      * @param triggerName
      * @param triggerGroupName
      * @param jobClass
      * @param milliseconds
-     * @param count 重复次数，小于等于0，则不限制次数
+     * @param count            重复次数，小于等于0，则不限制次数
      */
     public static void addJobInMilliseconds(String jobName, String jobGroupName,
-                              String triggerName, String triggerGroupName,
-                              Class jobClass, long milliseconds, int count) {
+                                            String triggerName, String triggerGroupName,
+                                            Class jobClass, long milliseconds, int count) {
         try {
             Scheduler sched = sf.getScheduler();
             JobDetail job = newJob(jobClass).withIdentity(jobName, jobGroupName).build();// 任务名，任务组，任务执行类
@@ -143,7 +150,7 @@ public class QuartzManager {
             SimpleScheduleBuilder simpleSchedule = SimpleScheduleBuilder
                     .simpleSchedule()
                     .withIntervalInMilliseconds(milliseconds);
-            if (count > 0){
+            if (count > 0) {
                 simpleSchedule.withRepeatCount(count);
             }
 
@@ -153,7 +160,7 @@ public class QuartzManager {
                     .withSchedule(simpleSchedule)
                     .build();
             Date ft = sched.scheduleJob(job, trigger);
-            LOGGER.info("{}启动于{}" , jobName, ft);
+            LOGGER.info("{}启动于{}", jobName, ft);
             // 启动
             if (!sched.isShutdown()) {
                 sched.start();
@@ -165,6 +172,7 @@ public class QuartzManager {
 
     /**
      * 按cron表达式添加定时任务
+     *
      * @param jobName
      * @param jobGroupName
      * @param triggerName
@@ -188,7 +196,7 @@ public class QuartzManager {
                     .build();
 
             Date ft = sched.scheduleJob(job, trigger);
-            LOGGER.info("{}启动于{}" , jobName, ft);
+            LOGGER.info("{}启动于{}", jobName, ft);
             // 启动
             if (!sched.isShutdown()) {
                 sched.start();
@@ -200,21 +208,22 @@ public class QuartzManager {
 
     /**
      * 移除调度任务
+     *
      * @param jobName
      * @param jobGroupName
      * @param triggerName
      * @param triggerGroupName
      */
     public static void removeJob(String jobName, String jobGroupName,
-                                 String triggerName, String triggerGroupName){
-        try{
+                                 String triggerName, String triggerGroupName) {
+        try {
             Scheduler scheduler = sf.getScheduler();
             TriggerKey triggerKey = new TriggerKey(triggerName, triggerGroupName);
             JobKey jobKey = new JobKey(jobName, jobGroupName);
             scheduler.pauseTrigger(triggerKey);
             scheduler.unscheduleJob(triggerKey);
             scheduler.deleteJob(jobKey);
-        }catch (SchedulerException e){
+        } catch (SchedulerException e) {
             e.printStackTrace();
         }
     }
@@ -222,11 +231,12 @@ public class QuartzManager {
     /**
      * 启动所有定时任务
      */
-    public static void startJobs(){
-        try{
+    public static void startJobs() {
+        try {
             Scheduler scheduler = sf.getScheduler();
-            scheduler.start();;
-        }catch (SchedulerException e){
+            scheduler.start();
+            ;
+        } catch (SchedulerException e) {
             e.printStackTrace();
         }
     }
@@ -234,13 +244,13 @@ public class QuartzManager {
     /**
      * 暂停所有定时任务
      */
-    public static void shutdownJobs(){
-        try{
+    public static void shutdownJobs() {
+        try {
             Scheduler scheduler = sf.getScheduler();
             if (!scheduler.isShutdown()) {
                 scheduler.shutdown();
             }
-        }catch (SchedulerException e){
+        } catch (SchedulerException e) {
             e.printStackTrace();
         }
     }

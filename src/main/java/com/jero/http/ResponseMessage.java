@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author zer0
  * @version 1.0
  */
-public class ResponseMessage<T> implements Serializable{
+public class ResponseMessage<T> implements Serializable {
 
     private static final long serialVersionUID = 2999784516561316773L;
 

@@ -58,7 +58,7 @@ public class ValidExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(BindException.class)
     @ResponseBody
-    public ResponseMessage<List<String>> handleConstraint(BindException  exception) {
+    public ResponseMessage<List<String>> handleConstraint(BindException exception) {
         BindingResult result = exception.getBindingResult();
         List<String> validErrorList = adapterValidError(result);
         return Result.error(Code.VALID_ERROR, validErrorList);
@@ -90,7 +90,7 @@ public class ValidExceptionHandler {
      * @param result
      * @return
      */
-    private List<String> adapterValidError(BindingResult result){
+    private List<String> adapterValidError(BindingResult result) {
         List<String> validErrorList = new ArrayList<String>();
         for (FieldError fieldError : result.getFieldErrors()) {
             validErrorList.add(fieldError.getDefaultMessage());

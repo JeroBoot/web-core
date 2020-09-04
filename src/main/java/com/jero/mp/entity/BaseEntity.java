@@ -13,10 +13,11 @@ import java.util.Date;
  **/
 public class BaseEntity<T extends BaseEntity<?>> extends Model<BaseEntity<T>> {
 
-    public BaseEntity(){}
+    public BaseEntity() {
+    }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "BaseEntity()";
     }
 
@@ -27,7 +28,7 @@ public class BaseEntity<T extends BaseEntity<?>> extends Model<BaseEntity<T>> {
         } else if (!(o instanceof BaseEntity)) {
             return false;
         } else {
-            BaseEntity<?> other = (BaseEntity)o;
+            BaseEntity<?> other = (BaseEntity) o;
             return other instanceof BaseEntity;
         }
     }

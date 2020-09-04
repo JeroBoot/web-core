@@ -44,10 +44,10 @@ public class RequestInfoFilter implements Filter {
         try {
             long startTime = System.currentTimeMillis();
             String uri = request.getServletPath() + (request.getPathInfo() == null ? "" : request.getPathInfo());
-            if(!isIgnore(uri)) {
+            if (!isIgnore(uri)) {
                 LOGGER.info("==================== RequestInfoFilter Start ====================");
                 LOGGER.info(request.getMethod() + " : " + uri);
-                LOGGER.info("request time：{}" , request.getSession().getMaxInactiveInterval());
+                LOGGER.info("request time：{}", request.getSession().getMaxInactiveInterval());
 
                 logHeaders(request);
                 logParams(request);
@@ -60,7 +60,7 @@ public class RequestInfoFilter implements Filter {
             } else {
                 filterChain.doFilter(request, response);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -98,9 +98,9 @@ public class RequestInfoFilter implements Filter {
     private static final boolean isIgnore(String url) {
         boolean ignore = false;
         int index = url.lastIndexOf(".");
-        if(index > 0) {
+        if (index > 0) {
             String subfix = url.substring(index + 1, url.length());
-            if(ignoreList.contains(subfix)) {
+            if (ignoreList.contains(subfix)) {
                 ignore = true;
             }
         }

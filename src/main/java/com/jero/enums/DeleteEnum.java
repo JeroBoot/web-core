@@ -8,12 +8,17 @@ public enum DeleteEnum {
     private int value;
     private String label;
 
-    DeleteEnum(int value, String label){
+    DeleteEnum(int value, String label) {
         this.value = value;
         this.label = label;
     }
 
-    public int getValue(){return value;}
-    public String getＬabel(){return label;}
+    public int getValue() {
+        return value;
+    }
+
+    public String getＬabel() {
+        return label;
+    }
 
 }

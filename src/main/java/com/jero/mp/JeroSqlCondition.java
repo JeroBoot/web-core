@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 
 /**
  * mybatis plus Table Field sql构造条件
+ *
  * @date 2020-03-23
  */
 public class JeroSqlCondition extends SqlCondition {

@@ -37,30 +37,31 @@ public class JeroExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(JeroBaseException.class)
     @ResponseBody
-    public ResponseMessage handlerJeroBaseException(JeroBaseException exception){
+    public ResponseMessage handlerJeroBaseException(JeroBaseException exception) {
         LOGGER.warn("业务异常", exception);
         return Result.error(exception.getErrorCode(), exception.getMessage());
     }
 
     /**
      * 获取引发异常的源头
+     *
      * @param e
      * @return 抛出的异常
      */
-    private Throwable deepestExcepetion(Throwable e){
-        if (e == null){
+    private Throwable deepestExcepetion(Throwable e) {
+        if (e == null) {
             return new NullPointerException("异常信息不能为空");
         }
 
         Throwable tmp = e;
         int breakPoint = 0;
-        while (tmp.getCause() != null){
-            if (tmp.equals(tmp.getCause())){
+        while (tmp.getCause() != null) {
+            if (tmp.equals(tmp.getCause())) {
                 break;
             }
             tmp = tmp.getCause();
             breakPoint++;
-            if (breakPoint > 1000){
+            if (breakPoint > 1000) {
                 break;
             }
         }

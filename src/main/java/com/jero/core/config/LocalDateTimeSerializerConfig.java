@@ -20,12 +20,12 @@ public class LocalDateTimeSerializerConfig {
     private String pattern;
 
     @Bean
-    public LocalDateTimeSerializer localDateTimeSerializer(){
+    public LocalDateTimeSerializer localDateTimeSerializer() {
         return new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(pattern));
     }
 
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(){
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
         return builder -> builder.serializerByType(LocalDateTimeSerializerConfig.class, localDateTimeSerializer());
     }
 

@@ -34,7 +34,7 @@ public class Result {
         return error(Code.ERROR.getCode(), message);
     }
 
-    public static ResponseMessage error(Code code){
+    public static ResponseMessage error(Code code) {
         return error(code.getCode(), code.getMsg(), null);
     }
 

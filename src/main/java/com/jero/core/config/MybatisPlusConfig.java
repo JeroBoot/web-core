@@ -11,6 +11,7 @@ public class MybatisPlusConfig {
 
     /**
      * ID生成器
+     *
      * @return
      */
     @Bean
@@ -20,10 +21,11 @@ public class MybatisPlusConfig {
 
     /**
      * 分页插件
+     *
      * @return
      */
     @Bean
-    public PaginationInterceptor paginationInterceptor(){
+    public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor();
     }
 
