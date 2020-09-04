@@ -21,41 +21,42 @@ import java.util.List;
  */
 public abstract class BaseController<T extends BaseEntity<?>> {
 
-    public BaseController(){}
+    public BaseController() {
+    }
 
-    public final T getById(Serializable id){
+    public final T getById(Serializable id) {
         return this.getService().getById(id);
     }
 
-    public final List<T> list(T t){
+    public final List<T> list(T t) {
         QueryWrapper query = Wrappers.query(t);
-        this.expandQuery(query);
+        this.expandQuery(query, t);
         return this.getService().list(query);
     }
 
-    public final PageInfo<T> page(PageInfo pageInfo, T t){
+    public final PageInfo<T> page(PageInfo pageInfo, T t) {
         Page page = getPage(pageInfo);
         QueryWrapper query = Wrappers.query(t);
-        this.expandQuery(query);
+        this.expandQuery(query, t);
         Page resultPage = this.getService().page(page, query);
         return getPageInfo(resultPage);
     }
 
-    public final boolean save(T data){
+    public final boolean save(T data) {
         this.verifySaveData(data);
         return this.getService().save(data);
     }
 
-    public final boolean update(T data){
+    public final boolean update(T data) {
         this.verifyUpdateData(data);
         return this.getService().updateById(data);
     }
 
-    public final boolean deleteBatchIds(Serializable... ids){
+    public final boolean deleteBatchIds(Serializable... ids) {
         return this.getService().removeByIds(Arrays.asList(ids));
     }
 
-    protected abstract void expandQuery(QueryWrapper query);
+    protected abstract void expandQuery(QueryWrapper query, T t);
 
     protected abstract void verifySaveData(T data);
 
@@ -65,9 +66,9 @@ public abstract class BaseController<T extends BaseEntity<?>> {
         PageInfo<T> pageInfo = new PageInfo();
         pageInfo.setList(page.getRecords());
         pageInfo.setCount(page.getTotal());
-        pageInfo.setPageSize((int)page.getSize());
+        pageInfo.setPageSize((int) page.getSize());
         pageInfo.setPageCount(page.getPages());
-        pageInfo.setPageNo((int)page.getCurrent());
+        pageInfo.setPageNo((int) page.getCurrent());
         return pageInfo;
     }
 
@@ -75,7 +76,6 @@ public abstract class BaseController<T extends BaseEntity<?>> {
         Page page = new Page();
         page.setSize(pageInfo.getPageSize());
         page.setCurrent(pageInfo.getPageNo());
-        page.setPages(pageInfo.getPageCount());
 
         return page;
     }
